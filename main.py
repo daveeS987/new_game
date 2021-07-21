@@ -11,14 +11,31 @@ class Game:
         # self.font = pygame.font.Font('Arial', 32)
         self.running = True
 
+    # method that iterates through our tilemap and builds it
+    def create_tile_map(self):
+        # i is the value of each item in tilemap list, row is the position of the list
+        # iterate through each row, enumerate gets content and position of the item in list
+        for i, row in enumerate(tilemap):
+            # iterate through each item by row/line/string
+            for j, column in enumerate(row):
+                if column == "B":
+                    # j = x positon and i = y position
+                    Block(self, j, i)
+                if column == "P":
+                    Player(self, j, i)
+
     def new(self):
+
         self.playing = True
 
         self.all_sprites = pygame.sprite.LayeredUpdates()
         self.blocks = pygame.sprite.LayeredUpdates()
         self.enemies = pygame.sprite.LayeredUpdates()
         self.attacks = pygame.sprite.LayeredUpdates()
-        self.player = Player(self, 1, 2)
+
+                # call tilemap
+        self.create_tile_map()
+        
 
     def events(self):
         for event in pygame.event.get():
