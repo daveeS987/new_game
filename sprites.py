@@ -15,11 +15,9 @@ class Player(pygame.sprite.Sprite):
         self.width = TILESIZE
         self.height = TILESIZE
 
-        # temporary variables that store change in movement during one loop, adds to the x and y variables
         self.x_change = 0
         self.y_change = 0
 
-        #direction your character is facing
         self.facing = 'down'
 
         self.image = pygame.Surface((self.width, self.height))
@@ -30,38 +28,54 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = self.y
 
     def update(self):
-        # call functions
         self.movement()
         
-        # add x_change onto the x value, move left to right
         self.rect.x += self.x_change
-        # add y_change onto the y value, move up and down
         self.rect.y += self.y_change
-        # set the temporary x_change and y_change
         self.x_change = 0
         self.y_change = 0
 
-    # moves the player
     def movement(self):
-        # X is the win_width or 640 pixels and Y is the win_height or 480 pixels
-        # stores all the keyboard keys
         keys = pygame.key.get_pressed()
-        # K = Keyboard LEFT = left arrow key
         if keys[pygame.K_LEFT]:
-            # taking away from x moves left on the x axis
             self.x_change -= PLAYER_SPEED
-            # change direction character facing 
             self.facing = 'left'
-        # K = Keyboard RIGHT = right arrow key
         if keys[pygame.K_RIGHT]:
-            # add to x to move right
             self.x_change += PLAYER_SPEED
             self.facing = 'right'
-            # move character up take away from y to move up
         if keys[pygame.K_UP]:
             self.y_change -= PLAYER_SPEED
             self.facing = 'up'
-            # move character down add to y to move down
         if keys[pygame.K_DOWN]:
             self.y_change += PLAYER_SPEED
             self.facing = 'down'
+
+# creates walls or barrier
+class  Block(pygame.sprite.Sprite):
+    # pass in game and the x and y coordinates
+        def __init__(self, game, x, y):
+            self.game = game
+            # layer that blocks are built on
+            self._layer = BLOCK_LAYER
+            # adds to all sprites and block groups
+            self.groups = self.game.all_sprites, self.game.blocks
+            # call init method of inherited class of py.sprite.Sprite
+            pygame.sprite.Sprite.__init__(self, self.groups)
+
+            # x and y position of each block * the size of each tile
+            self.x = x * TILESIZE
+            self.y = y * TILESIZE
+            # size of each sprite,makes each sprite a square with dimensions 32 pixels by 32 pixels
+            self.width = TILESIZE
+            self.height = TILESIZE
+
+            # gives the sprite a image that fits into a 32 by 32 pixel square
+            self.image = pygame.Surface([self.width, self.height])
+            # fill the image square with a color
+            self.image.fill(BLUE)
+
+            # create rectangle/hit box and set it to the size of the image
+            self.rect = self.image.get_rect()
+            # sets position of rectangle
+            self.rect.x = self.x
+            self.rect.y = self.y
