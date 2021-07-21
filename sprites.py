@@ -1,34 +1,67 @@
 import pygame, math, random
+
+from pygame import key
 from config import *
 
-# class for making player sprites
 class Player(pygame.sprite.Sprite):
-    # initialize, pass in game class and x (left <-> right)latitude, y (up <-> down)longitude coordinates
     def __init__(self, game, x, y):
         self.game = game
-        # layer of screen we want player to appear
         self.player = PLAYER_LAYER
-        # add player to the all sprites group
         self.groups = self.game.all_sprites
-        # call init method for inherited class
         pygame.sprite.Sprite.__init__(self, self.groups)
 
-        # tile size of player and location rectangles
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.width = TILESIZE
         self.height = TILESIZE
 
-        # creates an image of a rectangle thats 32 pixels wide and 32 pixels tall
+        # temporary variables that store change in movement during one loop, adds to the x and y variables
+        self.x_change = 0
+        self.y_change = 0
+
+        #direction your character is facing
+        self.facing = 'down'
+
         self.image = pygame.Surface((self.width, self.height))
-        # fills the rectangle with the color red
         self.image.fill(RED)
 
-        # rect sets the size of the rectangle or hit box to be the same as the sprites image
         self.rect = self.image.get_rect()
-        # x and y coordinates of the sprite rectangle/hit box
         self.rect.x = self.x
         self.rect.y = self.y
 
     def update(self):
-        pass
+        # call functions
+        self.movement()
+        
+        # add x_change onto the x value, move left to right
+        self.rect.x += self.x_change
+        # add y_change onto the y value, move up and down
+        self.rect.y += self.y_change
+        # set the temporary x_change and y_change
+        self.x_change = 0
+        self.y_change = 0
+
+    # moves the player
+    def movement(self):
+        # X is the win_width or 640 pixels and Y is the win_height or 480 pixels
+        # stores all the keyboard keys
+        keys = pygame.key.get_pressed()
+        # K = Keyboard LEFT = left arrow key
+        if keys[pygame.K_LEFT]:
+            # taking away from x moves left on the x axis
+            self.x_change -= PLAYER_SPEED
+            # change direction character facing 
+            self.facing = 'left'
+        # K = Keyboard RIGHT = right arrow key
+        if keys[pygame.K_RIGHT]:
+            # add to x to move right
+            self.x_change += PLAYER_SPEED
+            self.facing = 'right'
+            # move character up take away from y to move up
+        if keys[pygame.K_UP]:
+            self.y_change -= PLAYER_SPEED
+            self.facing = 'up'
+            # move character down add to y to move down
+        if keys[pygame.K_DOWN]:
+            self.y_change += PLAYER_SPEED
+            self.facing = 'down'
