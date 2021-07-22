@@ -17,4 +17,7 @@
 - https://www.youtube.com/watch?v=Okm3-OKzWa8&t=3s
 
 ### Sixth tutorial: Animation
-https://www.youtube.com/watch?v=whDf00oel-E
+- https://www.youtube.com/watch?v=whDf00oel-E
+
+### Seventh tutorial: Enemy
+- https://www.youtube.com/watch?v=whDf00oel-E
