@@ -14,6 +14,7 @@ class Game:
         self.character_spritesheet = Spritesheet('img/character.png')
         self.terrain_spritesheet = Spritesheet('img/terrain.png')
         self.enemy_spritesheet = Spritesheet('img/enemy.png')
+        self.attack_spritesheet = Spritesheet('img/attack.png')
         self.intro_background = pygame.image.load('img/introbackground.png')
         self.go_background = pygame.image.load('img/gameover.png')
 
@@ -26,7 +27,7 @@ class Game:
                 if column == "E":
                     Enemy(self, j, i)
                 if column == "P":
-                    Player(self, j, i)
+                    self.player = Player(self, j, i)
 
     def new(self):
 
@@ -46,6 +47,17 @@ class Game:
                 self.playing = False
                 self.running = False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    if self.player.facing == 'up':
+                        Attack(self, self.player.rect.x, self.player.rect.y - TILESIZE)
+                    if self.player.facing == 'down':
+                        Attack(self, self.player.rect.x, self.player.rect.y + TILESIZE)
+                    if self.player.facing == 'left':
+                        Attack(self, self.player.rect.x - TILESIZE, self.player.rect.y)
+                    if self.player.facing == 'right':
+                        Attack(self, self.player.rect.x + TILESIZE, self.player.rect.y)
+
     def update(self):
         self.all_sprites.update()
 
@@ -62,18 +74,14 @@ class Game:
             self.draw()
     
     def game_over(self):
-        # text we want to print
         text = self.font.render('Game Over', True, WHITE)
-        # get rectangle for text, center over
         text_rect = text.get_rect(center=(WIN_WIDTH/2, WIN_HEIGHT/2))
 
         restart_button = Button(10, WIN_HEIGHT - 60, 120, 50, WHITE, BLACK, 'Restart', 32)
 
         for sprite in self.all_sprites:
-            # kill every sprite in game, empty black screen
             sprite.kill()
 
-        # event loop
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
