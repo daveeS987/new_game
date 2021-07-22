@@ -8,7 +8,6 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
         self.clock = pygame.time.Clock()
-        # import fonts for the game
         self.font = pygame.font.Font('arial.ttf', 32)
         self.running = True
 
@@ -16,6 +15,7 @@ class Game:
         self.terrain_spritesheet = Spritesheet('img/terrain.png')
         self.enemy_spritesheet = Spritesheet('img/enemy.png')
         self.intro_background = pygame.image.load('img/introbackground.png')
+        self.go_background = pygame.image.load('img/gameover.png')
 
     def create_tile_map(self):
         for i, row in enumerate(tilemap):
@@ -60,19 +60,45 @@ class Game:
             self.events()
             self.update()
             self.draw()
-        self.running = False
     
     def game_over(self):
-        pass
+        # text we want to print
+        text = self.font.render('Game Over', True, WHITE)
+        # get rectangle for text, center over
+        text_rect = text.get_rect(center=(WIN_WIDTH/2, WIN_HEIGHT/2))
+
+        restart_button = Button(10, WIN_HEIGHT - 60, 120, 50, WHITE, BLACK, 'Restart', 32)
+
+        for sprite in self.all_sprites:
+            # kill every sprite in game, empty black screen
+            sprite.kill()
+
+        # event loop
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_pressed = pygame.mouse.get_pressed()
+
+            if restart_button.is_pressed(mouse_pos, mouse_pressed):
+                self.new()
+                self.main()
+
+            self.screen.blit(self.go_background, (0,0))
+            self.screen.blit(text, text_rect)
+            self.screen.blit(restart_button.image, restart_button.rect)
+            self.clock.tick(FPS)
+            pygame.display.update()
+
+
 
     def intro_screen(self):
         intro = True
 
-        # create title, content, antialiasing, color
         title = self.font.render('The game', True, BLACK)
-        # position rectangle
         title_rect = title.get_rect(x=10, y=10)
-        # create a button object
         play_button = Button(10, 50, 100, 50, WHITE, BLACK, 'Play', 32)
 
         while intro:
@@ -81,20 +107,15 @@ class Game:
                     intro = False
                     self.running = False
 
-            # get mouse position
             mouse_pos = pygame.mouse.get_pos()
-            # check list if mouse button pressed left button = [0], right button = [1]
             mouse_pressed = pygame.mouse.get_pressed()
 
-            # check if left button pressed
             if play_button.is_pressed(mouse_pos, mouse_pressed):
                 intro = False
             
-            # display background, text and buttons
             self.screen.blit(self.intro_background, (0,0))
             self.screen.blit(title, title_rect)
             self.screen.blit(play_button.image, play_button.rect)
-            # refresh every 60 frames per second
             self.clock.tick(FPS)
             pygame.display.update()
 

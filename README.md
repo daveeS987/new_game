@@ -27,3 +27,6 @@
 
 ### Ninth tutorial: Intro Screen
 - https://www.youtube.com/watch?v=vz8YnvnAPp4
+
+### Tenth tutorial: Game Over Screen
+- https://www.youtube.com/watch?v=yRkyrOWmSl4
