@@ -24,3 +24,6 @@
 
 ### Eighth tutorial: Camera
 - https://www.youtube.com/watch?v=KnAkhpF3mIU
+
+### Ninth tutorial: Intro Screen
+- https://www.youtube.com/watch?v=vz8YnvnAPp4

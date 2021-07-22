@@ -52,10 +52,8 @@ class Player(pygame.sprite.Sprite):
     def movement(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
-            # loop through every sprite in the game, move every sprite including player right
             for sprite in self.game.all_sprites:
                 sprite.rect.x += PLAYER_SPEED
-                # x_change keeps the player in the same position instead of moving it with the rest of the sprites
             self.x_change -= PLAYER_SPEED
             self.facing = 'left'
         if keys[pygame.K_RIGHT]:
@@ -85,7 +83,6 @@ class Player(pygame.sprite.Sprite):
             hits = pygame.sprite.spritecollide(self, self.game.blocks, False)
             if hits:
                 if self.x_change > 0:
-                    # for loop prevents camera from moving past barrier
                     for sprite in self.game.all_sprites:
                         sprite.rect.x += PLAYER_SPEED
                     self.rect.x = hits[0].rect.left - self.rect.width
@@ -274,3 +271,39 @@ class Ground(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = self.x
         self.rect.y = self.y
+
+class Button:
+    # pass in location of button, size of box, foreground and background color, content and t he fontsize
+    def __init__(self, x, y, width, height, fg, bg, content, fontsize):
+        self.font = pygame.font.Font('Arial.ttf', fontsize)
+        self.content = content
+
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.fg = fg
+        self.bg = bg
+
+        self.image = pygame.Surface((self.width, self.height))
+        self.image.fill(self.bg)
+        self.rect = self.image.get_rect()
+
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+        # render font with content(text we want to write), anti aliasing and the foreground color
+        self.text = self.font.render(self.content, True, self.fg)
+        # position of text, middle of button
+        self.text_rect = self.text.get_rect(center=(self.width/2, self.height/2))
+        # render text and rectangle
+        self.image.blit(self.text, self.text_rect)
+
+    def is_pressed(self, pos, pressed):
+        # get position of mouse
+        if self.rect.collidepoint(pos):
+            # return true if mouse button clicked
+            if pressed[0]:
+                return True
+            return False
+        return False
