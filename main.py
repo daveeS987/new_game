@@ -13,7 +13,6 @@ class Game:
 
         self.character_spritesheet = Spritesheet('img/character.png')
         self.terrain_spritesheet = Spritesheet('img/terrain.png')
-        # import spritesheet for enemies
         self.enemy_spritesheet = Spritesheet('img/enemy.png')
 
     def create_tile_map(self):

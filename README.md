@@ -21,3 +21,6 @@
 
 ### Seventh tutorial: Enemy
 - https://www.youtube.com/watch?v=whDf00oel-E
+
+### Eighth tutorial: Camera
+- https://www.youtube.com/watch?v=KnAkhpF3mIU
