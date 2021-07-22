@@ -11,7 +11,6 @@ class Game:
         # self.font = pygame.font.Font('Arial', 32)
         self.running = True
 
-        # load in sprite sheets
         self.character_spritesheet = Spritesheet('img/character.png')
         self.terrain_spritesheet = Spritesheet('img/terrain.png')
 
