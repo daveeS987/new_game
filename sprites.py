@@ -39,9 +39,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.movement()
-        # call animate function
         self.animate()
-        # call enemy collide
         self.collide_enemy()
         
         self.rect.x += self.x_change
@@ -54,19 +52,28 @@ class Player(pygame.sprite.Sprite):
     def movement(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
+            # loop through every sprite in the game, move every sprite including player right
+            for sprite in self.game.all_sprites:
+                sprite.rect.x += PLAYER_SPEED
+                # x_change keeps the player in the same position instead of moving it with the rest of the sprites
             self.x_change -= PLAYER_SPEED
             self.facing = 'left'
         if keys[pygame.K_RIGHT]:
+            for sprite in self.game.all_sprites:
+                sprite.rect.x -= PLAYER_SPEED
             self.x_change += PLAYER_SPEED
             self.facing = 'right'
         if keys[pygame.K_UP]:
+            for sprite in self.game.all_sprites:
+                sprite.rect.y += PLAYER_SPEED
             self.y_change -= PLAYER_SPEED
             self.facing = 'up'
         if keys[pygame.K_DOWN]:
+            for sprite in self.game.all_sprites:
+                sprite.rect.y -= PLAYER_SPEED
             self.y_change += PLAYER_SPEED
             self.facing = 'down'
 
-    # add enemy collision in
     def collide_enemy(self):
         hits = pygame.sprite.spritecollide(self, self.game.enemies, False)
         if hits:
@@ -78,16 +85,25 @@ class Player(pygame.sprite.Sprite):
             hits = pygame.sprite.spritecollide(self, self.game.blocks, False)
             if hits:
                 if self.x_change > 0:
+                    # for loop prevents camera from moving past barrier
+                    for sprite in self.game.all_sprites:
+                        sprite.rect.x += PLAYER_SPEED
                     self.rect.x = hits[0].rect.left - self.rect.width
                 if self.x_change < 0:
+                    for sprite in self.game.all_sprites:
+                        sprite.rect.x -= PLAYER_SPEED
                     self.rect.x = hits[0].rect.right
 
         if direction == 'y':
             hits = pygame.sprite.spritecollide(self, self.game.blocks, False)
             if hits:
                 if self.y_change > 0:
+                    for sprite in self.game.all_sprites:
+                        sprite.rect.y += PLAYER_SPEED
                     self.rect.y = hits[0].rect.top - self.rect.height
                 if self.y_change < 0:
+                    for sprite in self.game.all_sprites:
+                        sprite.rect.y -= PLAYER_SPEED
                     self.rect.y = hits[0].rect.bottom
 
     def animate(self):
@@ -143,7 +159,6 @@ class Player(pygame.sprite.Sprite):
                 if self.animation_loop >= 3:
                     self.animation_loop = 1                    
 
-# create enemy class
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, game, x, y):
         self.game = game
@@ -159,7 +174,6 @@ class Enemy(pygame.sprite.Sprite):
         self.x_change = 0
         self.y_change = 0
 
-        # random if enemy will start facing/moving left or right
         self.facing = random.choice(['left', 'right'])
         self.animation_loop = 1
         self.movement_loop = 0
@@ -173,9 +187,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = self.y
 
     def update(self):
-        # call movement
         self.movement()
-        # call animation
         self.animate()
 
         self.rect.x += self.x_change
