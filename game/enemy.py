@@ -1,7 +1,7 @@
 import pygame, math, random
 
 from pygame import key
-from game.config import *
+from config import *
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -31,6 +31,18 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = self.x
         self.rect.y = self.y
 
+        self.left_animations = [
+            self.game.enemy_spritesheet.get_sprite(3, 98, self.width, self.height),
+            self.game.enemy_spritesheet.get_sprite(35, 98, self.width, self.height),
+            self.game.enemy_spritesheet.get_sprite(68, 98, self.width, self.height),
+        ]
+
+        self.right_animations = [
+            self.game.enemy_spritesheet.get_sprite(3, 66, self.width, self.height),
+            self.game.enemy_spritesheet.get_sprite(35, 66, self.width, self.height),
+            self.game.enemy_spritesheet.get_sprite(68, 66, self.width, self.height),
+        ]
+
     def update(self):
         self.movement()
         self.animate()
@@ -55,23 +67,12 @@ class Enemy(pygame.sprite.Sprite):
                 self.facing = "left"
 
     def animate(self):
-        left_animations = [
-            self.game.enemy_spritesheet.get_sprite(3, 98, self.width, self.height),
-            self.game.enemy_spritesheet.get_sprite(35, 98, self.width, self.height),
-            self.game.enemy_spritesheet.get_sprite(68, 98, self.width, self.height),
-        ]
-
-        right_animations = [
-            self.game.enemy_spritesheet.get_sprite(3, 66, self.width, self.height),
-            self.game.enemy_spritesheet.get_sprite(35, 66, self.width, self.height),
-            self.game.enemy_spritesheet.get_sprite(68, 66, self.width, self.height),
-        ]
 
         if self.facing == "left":
             if self.x_change == 0:
                 self.image = self.game.enemy_spritesheet.get_sprite(3, 98, self.width, self.height)
             else:
-                self.image = left_animations[math.floor(self.animation_loop)]
+                self.image = self.left_animations[math.floor(self.animation_loop)]
                 self.animation_loop += 0.1
                 if self.animation_loop >= 3:
                     self.animation_loop = 1
@@ -80,7 +81,7 @@ class Enemy(pygame.sprite.Sprite):
             if self.x_change == 0:
                 self.image = self.game.enemy_spritesheet.get_sprite(3, 66, self.width, self.height)
             else:
-                self.image = right_animations[math.floor(self.animation_loop)]
+                self.image = self.right_animations[math.floor(self.animation_loop)]
                 self.animation_loop += 0.1
                 if self.animation_loop >= 3:
                     self.animation_loop = 1

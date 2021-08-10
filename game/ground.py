@@ -1,7 +1,7 @@
 import pygame, math, random
 
 from pygame import key
-from game.config import *
+from config import *
 
 
 class Ground(pygame.sprite.Sprite):

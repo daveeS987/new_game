@@ -1,10 +1,13 @@
 import pygame, sys
-from game.sprites import *
-from game.player import Player
-from game.enemy import Enemy
-from game.block import Block
-from game.ground import Ground
-from game.config import *
+
+from config import *
+from sprite_sheet import Spritesheet
+from player import Player
+from enemy import Enemy
+from block import Block
+from ground import Ground
+from attack import Attack
+from button import Button
 
 
 class Game:

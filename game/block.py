@@ -1,7 +1,7 @@
-import pygame, math, random
+import pygame
 
 from pygame import key
-from game.config import *
+from config import *
 
 
 class Block(pygame.sprite.Sprite):
